@@ -3,12 +3,16 @@ import { query, PokemonQueryResponseType, PokemonQueryVariablesType } from "./qu
 
 const _Loader = () => <div>Loading...</div>
 
+type Props = {
+  children?: React.ReactNode
+}
 
-export const QueryComponent = () => {
+export const QueryComponent = ({ children }: Props) => {
   const { data, loading } = useQuery<PokemonQueryResponseType, PokemonQueryVariablesType>(query, {
     variables: {
       limit: 5
-    }
+    },
+    fetchPolicy: 'network-only'
   })
 
   if (loading) return <_Loader />
@@ -20,6 +24,13 @@ export const QueryComponent = () => {
           <div>{pokemon.name}</div>
         </div>
       ))}
+
+      {Boolean(children) && (
+        <div className="mt-2 pl-4">
+          <span className="font-bold">Nested children:</span>
+          <div>{children}</div>
+        </div>
+      )}
     </div>
   )
 }

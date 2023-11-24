@@ -24,13 +24,27 @@ export default function Home() {
            * No manual getDataFromTree() required, it's automatically done by the new React Suspense SSR support.
            * We would still need to manually extract and initialize apolloClient cache for it to resume from the
            * server-side cache though.
+           * 
+           * Note that eventhough they are nested and cause waterfall during SSR,
+           * they will all still be resolved by the time the initial HTML response is sent completely.
           */}
-          <SuspenseQueryComponent />
+          <SuspenseQueryComponent>
+            <SuspenseQueryComponent>
+              <SuspenseQueryComponent />
+            </SuspenseQueryComponent>
+          </SuspenseQueryComponent>
         </div>
 
         <h3 className="text-xl font-bold">Components with useQuery()</h3>
         <div>
-          <QueryComponent />
+          {/* These will only be fetched in the client-side because 
+           * we are not doing getDataFromTree().
+          */}
+          <QueryComponent>
+            <QueryComponent>
+              <QueryComponent />
+            </QueryComponent>
+          </QueryComponent>
         </div>
     </main>
   )
