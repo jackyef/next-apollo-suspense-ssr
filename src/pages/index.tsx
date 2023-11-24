@@ -1,10 +1,16 @@
 import { Inter } from 'next/font/google'
+import { useState } from 'react'
 import { QueryComponent } from '~/components/QueryComponent'
 import { SuspenseQueryComponent } from '~/components/SuspenseQueryComponent'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [limit, setLimit] = useState(1)
+  const increaseLimit = () => setLimit(prev => prev + 1)
+
+  console.log('render Home page')
+
   return (
     <main
       className={`flex min-h-screen flex-col gap-8 p-24 ${inter.className}`}
@@ -15,6 +21,14 @@ export default function Home() {
           <code className="font-mono font-bold">src/pages/index.tsx</code>
         </p>
 
+      <div>
+        <button 
+          className="px-4 py-2 rounded-xl bg-teal-600 text-white" 
+          onClick={increaseLimit}
+        >
+          Current limit: {limit}
+        </button>
+      </div>
 
       </div>
         <h3 className="text-xl font-bold">Components with useSuspenseQuery()</h3>
@@ -28,9 +42,9 @@ export default function Home() {
            * Note that eventhough they are nested and cause waterfall during SSR,
            * they will all still be resolved by the time the initial HTML response is sent completely.
           */}
-          <SuspenseQueryComponent>
-            <SuspenseQueryComponent>
-              <SuspenseQueryComponent />
+          <SuspenseQueryComponent limit={limit}>
+            <SuspenseQueryComponent limit={limit}>
+              <SuspenseQueryComponent limit={limit} />
             </SuspenseQueryComponent>
           </SuspenseQueryComponent>
         </div>
@@ -40,9 +54,9 @@ export default function Home() {
           {/* These will only be fetched in the client-side because 
            * we are not doing getDataFromTree().
           */}
-          <QueryComponent>
-            <QueryComponent>
-              <QueryComponent />
+          <QueryComponent limit={limit}>
+            <QueryComponent limit={limit}>
+              <QueryComponent limit={limit} />
             </QueryComponent>
           </QueryComponent>
         </div>

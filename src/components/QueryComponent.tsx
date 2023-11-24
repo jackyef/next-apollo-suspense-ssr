@@ -5,15 +5,17 @@ const _Loader = () => <div>Loading...</div>
 
 type Props = {
   children?: React.ReactNode
+  limit: number
 }
 
-export const QueryComponent = ({ children }: Props) => {
+export const QueryComponent = ({ children, limit }: Props) => {
   const { data, loading } = useQuery<PokemonQueryResponseType, PokemonQueryVariablesType>(query, {
     variables: {
-      limit: 5
+      limit
     },
     fetchPolicy: 'network-only'
   })
+  console.log('render QueryComponent')
 
   if (loading) return <_Loader />
 

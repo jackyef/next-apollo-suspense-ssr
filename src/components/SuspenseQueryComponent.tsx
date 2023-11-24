@@ -3,10 +3,10 @@ import { Suspense } from "react"
 import { query, PokemonQueryResponseType, PokemonQueryVariablesType } from "./query"
 
 const _Loader = () => <div>Loading...</div>
-const _Content = () => {
+const _Content = ({ limit }: { limit: number }) => {
   const { data } = useSuspenseQuery<PokemonQueryResponseType, PokemonQueryVariablesType>(query, {
     variables: {
-      limit: 3
+      limit
     },
     fetchPolicy: 'network-only'
   })
@@ -22,13 +22,15 @@ const _Content = () => {
 
 type Props = {
   children?: React.ReactNode
+  limit: number
 }
 
-export const SuspenseQueryComponent = ({ children }: Props) => {
+export const SuspenseQueryComponent = ({ children, limit}: Props) => {
+  console.log('render SuspenseQueryComponent')
   return (
     <Suspense fallback={<_Loader />}>
       <div>
-        <_Content />
+        <_Content limit={limit} />
 
         {Boolean(children) && (
           <div className="mt-2 pl-4">
